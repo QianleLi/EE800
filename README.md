@@ -19,7 +19,7 @@ You will find plenty of commented codes in those source files. I kept them in ca
 ***
 In the final version of my project, the ORB-SLAM package ared used to extract ORB points from images taken from a stereo camera. Actually, the package does much more than that, you can read the [paper](https://ieeexplore.ieee.org/abstract/document/7946260) to learn details. In short, this SLAM algorithm can be applied on UAVs, and hand-hold devices. It can build a 3D map and locate the camera in the map. Based on my own testing experiments and some comments from the Internet, ORB-SLAM works better in indoor environment. To achieve better performance, you should try to do as more close-looping as possible.  
 ![ORB-SLAM Configuration](https://pic3.zhimg.com/v2-b0b335c323b2ff6cd34024f97bbfe266_r.jpg "ORB-SLAM Configuration")  
-![Image text](images/ORB-SLAM Configuration.jpg)  
+![ORB-SLAM Configuration](https://github.com/QianleLi/EE800/blob/master/images/ORB-SLAM%20Configuration.jpg "ORB-SLAM Configuration")  
 However, I don't need this package to actually do SLAM in this project. As you can see in the above picture, after its tracking process, it deterines if the current frame is a new key frame. If it decides to create a new key frame, I collect all new map points in that new key frame and publish them as a C++ vector.  
 Therefore, most part of the package is run for no purpose in my project, which is not only a possible way to improve the efficiency of the whole system, but also a possible research direction.  
 [Return to Index](README.md#Index)  
