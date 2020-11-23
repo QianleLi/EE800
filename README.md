@@ -1,18 +1,27 @@
+This repository is created for the convenience of sharing and further research. It keeps a backup of my EE800 project.  
 This project is consist of the RotorS Simulator, ORB-SLAM package, ground robot model package and the navigation stack. Besides, I have some necessary dependencies included in the drone_ws workspace.  
 **The whole project was tested on Ubuntu18.04, ROS Melodic and Gazebo 9.** 
 ***
 # Index
 
-* [ORB-SLAM Package](README.md#ORB-SLAM-Package)
-* [RotorS Simulator](README.md#RotorS-Simulator)
-* [Ground Robot Model and Navigation Package](README.md#Ground-Robot-Model-and-Navigation-Package)
-* [SimpleLayer](README.md#SimpleLayer)
-* [Some Instructions](README.md#Some-Instructions)
+* [ORBtest_ws](README.md#ORBtest_ws)
+	* [ORB-SLAM Package](README.md#ORB-SLAM-Package)
+* [drone_ws](README.md#drone_ws)
+	* [RotorS Simulator](README.md#RotorS-Simulator)
+	* [Ground Robot Model and Navigation Package](README.md#Ground-Robot-Model-and-Navigation-Package)
+	* [SimpleLayer](README.md#SimpleLayer)
+* [Instructions](README.md#Instructions)
+	* [Build](README.md#Build)
+	* [Run](README.md#Run)
+	* [Helpful Infomation](README.md#Helpful-Information)
 ***
-## ORB-SLAM Package
+## ORBtest_ws
 
+### ORB-SLAM Package
+
+**I only used stereo camera in this project, so codes for RGB-D cameras and monocular cameras are not studied and tested.**  
 The original version of ORB-SLAM package is [here](https://github.com/raulmur/ORB_SLAM2).  
- 
+
 I added some code in System.cc, Tracking.cc, Frame.cc and KeyFrame.cc. Needless to say I also modified those related head files. You can search for `EE800 code` to find those codes I added in those source files.    
 
 You will find plenty of commented codes in those source files. I kept them in case I might use them later. You can safely delete all those commented codes in source files.  
@@ -20,10 +29,11 @@ You will find plenty of commented codes in those source files. I kept them in ca
 In the final version of my project, the ORB-SLAM package ared used to extract ORB points from images taken from a stereo camera. Actually, the package does much more than that, you can read the [paper](https://ieeexplore.ieee.org/abstract/document/7946260) to learn details. In short, this SLAM algorithm can be applied on UAVs, and hand-hold devices. It can build a 3D map and locate the camera in the map. Based on my own testing experiments and some comments from the Internet, ORB-SLAM works better in indoor environment. To achieve better performance, you should try to do as more close-looping as possible.  
 ![ORB-SLAM Configuration](https://github.com/QianleLi/EE800/blob/master/images/ORB-SLAM%20Configuration.jpg "ORB-SLAM Configuration")  
 However, I don't need this package to actually do SLAM in this project. As you can see in the above picture, after its tracking process, it deterines if the current frame is a new key frame. If it decides to create a new key frame, I collect all new map points in that new key frame and publish them as a C++ vector.  
-Therefore, most part of the package is run for no purpose in my project, which is not only a possible way to improve the efficiency of the whole system, but also a possible research direction.  
+Therefore, some parts of the package is run for no purpose in my project, which is a way to improve the efficiency of the whole system. Besides, ORB-SLAM also supports RGB-D cameras and monocular cameras. I think there are still a lot to dig in application and improvement.  
 [Return to Index](README.md#Index)  
+## drone_ws
 
-## RotorS Simulator
+### RotorS Simulator
 
 Rotors Simulator is a package developed by the Autonomous Systems Lab of ETH zurich. You may find the original package from [here](https://github.com/ethz-asl/rotors_simulator/wiki).    
 
@@ -38,7 +48,7 @@ In my project, the UAV always hovering above the ground robot. To achieve that, 
 4. Publish the position message to default topic for the UAV to control it in the Gazebo environment.  
 [Return to Index](README.md#Index)  
 ***
-## Ground Robot Model and Navigation Package
+### Ground Robot Model and Navigation Package
 
 The robot model is in the `mbot_description` package, I built this robot model and it is not a real robot model.  
 The robot is equipped with a RGB-D camera and a laser sensor, moving with two differential drived wheels and a caster wheel. However, the RGB-D camera is not used in this project due to its poor performance camparing to the laser sensor in mapping mission.  
@@ -46,7 +56,7 @@ The robot is equipped with a RGB-D camera and a laser sensor, moving with two di
 
 [Return to Index](README.md#Index)  
 ***
-## SimpleLayer
+### SimpleLayer
 
 In my project, the ORB-SLAM module publishes messages which contain map points of the current frame. In order to make use of those messages and fuse the observations of the laser sensor and the stereo camera, I create a plugin based on the costmap2d package.  
 If you are not familiar with the costmap2d package, you may check the [ROS Wiki](http://wiki.ros.org/costmap_2d). Also, there is a [paper](https://ieeexplore.ieee.org/abstract/document/6942636) discuss that.  
@@ -58,8 +68,9 @@ In Gazebo environment, if the orientation of the robot is parallel to the x axis
 
 [Return to Index](README.md#Index)  
 ***
-## Some Instructions
+## Instructions
 
+### Build
 **You have to install gmapping and navigation stack before building this module.**  
 Install gmapping:  
 `sudo apt-get install ros-melodic-gmapping`  
@@ -69,5 +80,35 @@ I have some dependencies included in the module, but I may still miss some parts
 
 **Build Instruction:**  
 1. Download two workspaces and put them in your home directory.
-2. For 
+2. For drone_ws:    
+```
+cd ~/drone_ws
+catkin build
+```
+3. For ORBtest_ws:
+```
+cd ~/ORBtest_ws
+catkin_make
+```
+[Return to Index](README.md#Index)  
+
+### Run
+
+**The ORB-SLAM package needs a roscore to run, so you have to run the rotorS simulator and start simulation first.**  
+To run the simulation:  
+```
+cd ~/drone_ws
+roslaunch rotors_gazebo my_mav.launch
+```
+Run the ORB package:  
+```
+cd ~/ORBtest_ws
+rosrun orb_detector Stereo ./src/orb_detector/Vocabulary/ORBvoc.txt ./src/orb_detector/Examples/Stereo/EuRoC.yaml true
+```
+If packages are built and run successfully, the result should be like this:  
+![Result](https://github.com/QianleLi/EE800/blob/master/images/Result.PNG "Result")   
+[Return to Index](README.md#Index)  
+### Helpful Information
+
+
 [Return to Index](README.md#Index)  
