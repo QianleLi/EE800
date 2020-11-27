@@ -1,6 +1,7 @@
 This repository is created for the convenience of sharing and further research. It keeps a backup of my EE800 project.  
 This project is consist of the RotorS Simulator, ORB-SLAM package, ground robot model package and the navigation stack. Besides, I have some necessary dependencies included in the drone_ws workspace.  
-**The whole project was tested on Ubuntu18.04, ROS Melodic and Gazebo 9.** 
+**The whole project was tested on Ubuntu18.04, ROS Melodic and Gazebo 9.**  
+
 ***
 # Index
 
@@ -112,3 +113,7 @@ If packages are built and run successfully, the result should be like this:
 
 
 [Return to Index](README.md#Index)  
+
+By Qianle Li  
+qli59@stevens.edu  
+11/23/2020
