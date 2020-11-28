@@ -1,6 +1,7 @@
 This repository is created for the convenience of sharing and further research. It keeps a backup of my EE800 project.  
 This project is consist of the RotorS Simulator, ORB-SLAM package, ground robot model package and the navigation stack. Besides, I have some necessary dependencies included in the drone_ws workspace.  
 **The whole project was tested on Ubuntu18.04, ROS Melodic and Gazebo 9.**  
+If you want to know more details about this project, please check my final report.  
 
 ***
 # Index
@@ -14,7 +15,7 @@ This project is consist of the RotorS Simulator, ORB-SLAM package, ground robot 
 * [Instructions](README.md#Instructions)
 	* [Build](README.md#Build)
 	* [Run](README.md#Run)
-	* [Helpful Infomation](README.md#Helpful-Information)
+	* [Notes](README.md#Notes)
 ***
 ## ORBtest_ws
 
@@ -42,11 +43,13 @@ If you want to build the original package, you may follow [this instruction](htt
 
 There are models of several UAVs and [VI-sensor](http://wiki.ros.org/vi_sensor) included in this package. You may check those models in the package `rotors_description`.  
 
-In my project, the UAV always hovering above the ground robot. To achieve that, I create a node to achieve that. The node does the following jobs:  
+In my project, the UAV always hovering above the ground robot. To achieve that, I create a node named "syncronization" to achieve that. The node does the following jobs:  
 1. Subscribe to the topic `gazebo/modelstates` to get the current location of the ground robot.  
 2. Transform the message type from `gazebo_msgs::ModelStates` to `trajectory_msgs::MultiDOFJointTrajectory`.
 3. During the process of transformation, change the value `z` to 2.5, which means the UAV will keep hovering at the height of 2.5 meters.
 4. Publish the position message to default topic for the UAV to control it in the Gazebo environment.  
+The source file is `my_wappoint.cpp` under `~drone_ws/src/rotors_simulator/rotors_gazebo/src`.  
+
 [Return to Index](README.md#Index)  
 ***
 ### Ground Robot Model and Navigation Package
@@ -109,11 +112,15 @@ rosrun orb_detector Stereo ./src/orb_detector/Vocabulary/ORBvoc.txt ./src/orb_de
 If packages are built and run successfully, the result should be like this:  
 ![Result](https://github.com/QianleLi/EE800/blob/master/images/Result.PNG "Result")   
 [Return to Index](README.md#Index)  
-### Helpful Information
+### Notes
 
+* Camera parameters  
+I used VI-sensor as my stereo camera in this project. If you want to apply the ORB package on other camera models or in real world environment, Remember to modify `EuRoC.yaml` under `~/ORBtest_ws/src/orb_detector/Examples/Stereo`.  
+* Communication between the ground robot and the UAV  
+As I use ROS and Gazebo to simulate, messages flow through ROS nodes and topics. If you are not familiar with this, please check [ROS Wiki](http://wiki.ros.org/ROS/Tutorials).  
 
 [Return to Index](README.md#Index)  
 
 By Qianle Li  
 qli59@stevens.edu  
-11/23/2020
+11/28/2020

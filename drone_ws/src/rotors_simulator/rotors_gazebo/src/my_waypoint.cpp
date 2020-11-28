@@ -17,9 +17,9 @@ using namespace std;
 
 geometry_msgs::Transform robot_pose;
 //A callback function Excuted each time a new pose message arrives
-//要发送的数据与接收到的数据结构略有不同
-void poseMessageReceived(const gazebo_msgs::ModelStates& msg){//这里还需要加入对string name 的判断
-//需要对string name列表中的模型名称进行判断，获得机器人在列表中的index，然后再把pose列表中对应索引的数据取出来
+//Data structures of input and output messages are different
+void poseMessageReceived(const gazebo_msgs::ModelStates& msg){
+    // Pick up the ground robot name from the C++ vector, get its index and then get the pose of the robot in the pose vector
 	vector<string> model_name = msg.name;
 	vector<string>::iterator iter;
 	iter = find(model_name.begin(),model_name.end(),"mbot");
@@ -43,7 +43,6 @@ int main(int argc,char **argv){
 	ros::Publisher wp_pub =nh.advertise<trajectory_msgs::MultiDOFJointTrajectory>(mav_msgs::default_topics::COMMAND_TRAJECTORY, 1);
 	
 	while (ros::ok()) {
-	//创建一个发送的
 	trajectory_msgs::MultiDOFJointTrajectoryPtr msg(new trajectory_msgs::MultiDOFJointTrajectory);
     ros::spinOnce();
     msg->header.stamp = ros::Time::now();
