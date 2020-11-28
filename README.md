@@ -1,6 +1,6 @@
 Author: Qianle Li  
 qli59@stevens.edu  
-Advisor: Yi Guo
+Advisor: Yi Guo  
 11/28/2020
 ***
 This repository is created for the convenience of sharing and further research. It keeps a backup of my EE800 project.  
