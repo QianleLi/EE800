@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<launch>
+	<arg name="mav_name" default="firefly"/>
+	<arg name="world_name" default="my_mall_without_actor"/>
+	<!-- ped_with_robot  all_ped_with_robot  mall_with_robot my_mall my_mall_without_actor -->
+	<arg name="enable_logging" default="false" />
+	<arg name="enable_ground_truth" default="true" />
+	<arg name="log_file" default="$(arg mav_name)" />
+	<!-- 地面机器人初始坐标  -->
+	<arg name="gx" default="0"/>
+	<arg name="gy" default="5"/>
+	<arg name="gz" default="0.2"/>
+	<!-- 飞行器初始坐标  -->
+	<arg name="fx" default="0"/>
+	<arg name="fy" default="6"/>
+	<arg name="fz" default="0.2"/>
+	<arg name="roll" default="0"/>
+	<arg name="pitch" default="0"/>
+	<arg name="yaw" default="0"/>
+
+	<env name="GAZEBO_MODEL_PATH" value="${GAZEBO_MODEL_PATH}:$(find rotors_gazebo)/models"/>
+	<env name="GAZEBO_RESOURCE_PATH" value="${GAZEBO_RESOURCE_PATH}:$(find rotors_gazebo)/models"/>
+  
+  <!-- world -->
+	<include file="$(find gazebo_ros)/launch/empty_world.launch">
+		<arg name="world_name" value="$(find rotors_gazebo)/worlds/$(arg world_name).world" />
+		<!-- <arg name="debug" value="true"/> -->
+		<arg name="paused" value="false"/>
+		<!-- <arg name="gui" value="false"/> -->
+		<!-- <arg name="verbose" value="true"/> -->
+	</include>
+	
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+	<!-- 加载机器人模型描述参数 -->
+	<param name="robot_description" command="$(find xacro)/xacro --inorder '$(find mbot_description)/urdf/libot_display.xacro'" /> 
+<!-- 加载无人机模型描述参数 -->
+    <group ns="$(arg mav_name)">
+        <include file="$(find rotors_gazebo)/launch/spawn_mav.launch">
+			<arg name="mav_name" value="$(arg mav_name)" />
+			<arg name="x" value="$(arg fx)"/>
+			<arg name="y" value="$(arg fy)"/>
+			<arg name="z" value="$(arg fz)"/>
+			<!--修改这里的文件来改变VI-sensor-->
+			<arg name="model" value="$(find rotors_description)/urdf/mav_with_vi_sensor.gazebo" />
+			<arg name="enable_logging" value="$(arg enable_logging)" />
+			<arg name="enable_ground_truth" value="$(arg enable_ground_truth)" />
+			<arg name="log_file" value="$(arg log_file)"/>
+    	</include>
+		<node name="lee_position_controller_node" pkg="rotors_control" type="lee_position_controller_node">
+			<rosparam command="load" file="$(find rotors_gazebo)/resource/lee_controller_$(arg mav_name).yaml" />
+			<rosparam command="load" file="$(find rotors_gazebo)/resource/$(arg mav_name).yaml" />
+			<remap from="odometry" to="odometry_sensor1/odometry" />
+		</node>
+		<!--
+		<node name="hovering_example" pkg="rotors_gazebo" type="hovering_example" output="screen"/>
+		-->
+		<!-- 开始发布用来同步地面机器人和无人机坐标和姿态的节点  -->
+		<node name="waypoint_publisher" pkg="rotors_gazebo" type="my_waypoint" output="screen"/>
+    </group>
+    
+    <!-- 在gazebo中加载机器人模型-->
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" args="-urdf -model mbot -param robot_description -x $(arg gx) -y $(arg gy) -z $(arg gz) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"/> 
+    <!--
+    <node name="ground_robot_teleop" pkg="mbot_teleop" type="mbot_teleop.py" output="screen"/>
+    -->
+    <!--
+    <include file="$(find mbot_navigation)/launch/gmapping.launch"/>
+    -->
+
+    <!-- 设置地图的配置文件 -->
+    <arg name="map" default="mall_mapping.yaml" />
+
+    <!-- 运行地图服务器，并且加载设置的地图-->
+    
+    <node name="map_server" pkg="map_server" type="map_server" args="$(find mbot_navigation)/maps/$(arg map)"/>
+    
+    <!-- 启动AMCL节点 -->
+   
+    <include file="$(find mbot_navigation)/launch/amcl.launch" />
+    
+	<!-- 运行move_base节点 -->
+    <include file="$(find mbot_navigation)/launch/move_base.launch" />
+
+    <!-- 运行rviz -->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find mbot_navigation)/rviz/nav.rviz"/>
+    
+</launch>

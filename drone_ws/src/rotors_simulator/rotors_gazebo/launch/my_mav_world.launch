@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<launch>
+	<arg name="mav_name" default="firefly"/>
+	<arg name="world_name" default="my_mall"/>
+	<!-- ped_with_robot  all_ped_with_robot  mall_with_robot my_mall my_mall_without_actor  -->
+	<arg name="enable_logging" default="false" />
+	<arg name="enable_ground_truth" default="true" />
+	<arg name="log_file" default="$(arg mav_name)" />
+	<!-- 地面机器人初始坐标  -->
+	<arg name="gx" default="0"/>
+	<arg name="gy" default="5"/>
+	<arg name="gz" default="0.2"/>
+	<!-- 飞行器初始坐标  -->
+	<arg name="fx" default="0"/>
+	<arg name="fy" default="6"/>
+	<arg name="fz" default="0.2"/>
+	<arg name="roll" default="0"/>
+	<arg name="pitch" default="0"/>
+	<arg name="yaw" default="0"/>
+
+	<env name="GAZEBO_MODEL_PATH" value="${GAZEBO_MODEL_PATH}:$(find rotors_gazebo)/models"/>
+	<env name="GAZEBO_RESOURCE_PATH" value="${GAZEBO_RESOURCE_PATH}:$(find rotors_gazebo)/models"/>
+  
+  <!-- world -->
+	<include file="$(find gazebo_ros)/launch/empty_world.launch">
+		<arg name="world_name" value="$(find rotors_gazebo)/worlds/$(arg world_name).world" />
+		<!-- <arg name="debug" value="true"/> -->
+		<arg name="paused" value="false"/>
+		<!-- <arg name="gui" value="false"/> -->
+		<!-- <arg name="verbose" value="true"/> -->
+	</include>
+    
+</launch>
