@@ -32,12 +32,13 @@ The original version of ORB-SLAM package is [here](https://github.com/raulmur/OR
 I added some code in System.cc, Tracking.cc, Frame.cc and KeyFrame.cc. Needless to say I also modified those related head files. You can search for `EE800 code` to find those codes I added in those source files.    
 
 You will find plenty of commented codes in those source files. I kept them in case I might use them later. You can safely delete all those commented codes in source files.  
-***
+
 In the final version of my project, the ORB-SLAM package ared used to extract ORB points from images taken from a stereo camera. Actually, the package does much more than that, you can read the [paper](https://ieeexplore.ieee.org/abstract/document/7946260) to learn details. In short, this SLAM algorithm can be applied on UAVs, and hand-hold devices. It can build a 3D map and locate the camera in the map. Based on my own testing experiments and some comments from the Internet, ORB-SLAM works better in indoor environment. To achieve better performance, you should try to do as more close-looping as possible.  
 ![ORB-SLAM Configuration](https://github.com/QianleLi/EE800/blob/master/images/ORB-SLAM%20Configuration.jpg "ORB-SLAM Configuration")  
 However, I don't need this package to actually do SLAM in this project. As you can see in the above picture, after its tracking process, it deterines if the current frame is a new key frame. If it decides to create a new key frame, I collect all new map points in that new key frame and publish them as a C++ vector.  
 Therefore, some parts of the package is run for no purpose in my project, which is a way to improve the efficiency of the whole system. Besides, ORB-SLAM also supports RGB-D cameras and monocular cameras. I think there are still a lot to dig in application and improvement.  
 [Return to Index](README.md#Index)  
+***
 ## drone_ws
 
 ### RotorS Simulator
@@ -100,7 +101,7 @@ cd ~/ORBtest_ws
 catkin_make
 ```
 [Return to Index](README.md#Index)  
-
+***
 ### Run
 
 **The ORB-SLAM package needs a roscore to run, so you have to run the rotorS simulator and start simulation first.**  
@@ -116,7 +117,8 @@ rosrun orb_detector Stereo ./src/orb_detector/Vocabulary/ORBvoc.txt ./src/orb_de
 ```
 If packages are built and run successfully, the result should be like this:  
 ![Result](https://github.com/QianleLi/EE800/blob/master/images/Result.PNG "Result")   
-[Return to Index](README.md#Index)  
+[Return to Index](README.md#Index) 
+***
 ### Notes
 
 * Camera parameters  
