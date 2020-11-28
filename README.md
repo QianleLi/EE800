@@ -1,3 +1,8 @@
+Author: Qianle Li  
+qli59@stevens.edu  
+Advisor: Yi Guo
+11/28/2020
+***
 This repository is created for the convenience of sharing and further research. It keeps a backup of my EE800 project.  
 This project is consist of the RotorS Simulator, ORB-SLAM package, ground robot model package and the navigation stack. Besides, I have some necessary dependencies included in the drone_ws workspace.  
 **The whole project was tested on Ubuntu18.04, ROS Melodic and Gazebo 9.**  
@@ -120,7 +125,3 @@ I used VI-sensor as my stereo camera in this project. If you want to apply the O
 As I use ROS and Gazebo to simulate, messages flow through ROS nodes and topics. If you are not familiar with this, please check [ROS Wiki](http://wiki.ros.org/ROS/Tutorials).  
 
 [Return to Index](README.md#Index)  
-
-By Qianle Li  
-qli59@stevens.edu  
-11/28/2020
