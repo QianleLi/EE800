@@ -124,6 +124,8 @@ If packages are built and run successfully, the result should be like this:
 * Camera parameters  
 I used VI-sensor as my stereo camera in this project. If you want to apply the ORB package on other camera models or in real world environment, Remember to modify `EuRoC.yaml` under `~/ORBtest_ws/src/orb_detector/Examples/Stereo`.  
 * Communication between the ground robot and the UAV  
-As I use ROS and Gazebo to simulate, messages flow through ROS nodes and topics. If you are not familiar with this, please check [ROS Wiki](http://wiki.ros.org/ROS/Tutorials).  
+As I use ROS and Gazebo to simulate, messages flow through ROS nodes and topics. If you are not familiar with this, please check [ROS Wiki](http://wiki.ros.org/ROS/Tutorials).   
+* Laser detection for actors
+To detector the actors in the Gazebo environment, you have to install the GPU driver on your Ubuntu system.  
 
 [Return to Index](README.md#Index)  
