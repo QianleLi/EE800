@@ -86,7 +86,7 @@ Install gmapping:
 `sudo apt-get install ros-melodic-gmapping`  
 Install navigation stack:  
 `sudo apt-get install ros-melodic-navigation`  
-I have some dependencies included in the module, but I may still miss some parts since I tried a lot of other packages in the beginning of this project. Therefore, you may follow the error messages of your terminal and install some necessary dependencies.  
+**Install all dependencies required by the ORB-SLAM package.** You may check the requirement [here](https://github.com/raulmur/ORB_SLAM2).  
 
 **Build Instruction:**  
 1. Download two workspaces and put them in your home directory.
